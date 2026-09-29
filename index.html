@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador y Calculadora de Nóminas Online | Plantilla Fácil</title>
+    <meta name="description" content="Herramienta gratuita para calcular nóminas, sueldo neto, deducciones IRPF y Seguridad Social, e importar desde hojas de cálculo.">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--border);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group textarea {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--border);
+            color: var(--primary);
+        }
+
+        .result-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dbeafe;
+            font-size: 0.95rem;
+        }
+
+        .result-row.total {
+            border-bottom: none;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+            padding-top: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .tabs, .btn, header p, .no-print { display: none !important; }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .container { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Calculadora y Generador de Nóminas</h1>
+        <p>Crea tu nómina limpia, calcula retenciones o importa desde hojas de cálculo</p>
+    </header>
+
+    <div class="tabs no-print">
+        <button class="tab-btn active" onclick="switchTab('calculadora')">📄 Crear / Calcular Nómina</button>
+        <button class="tab-btn" onclick="switchTab('excel')">📊 Importar desde Excel/CSV</button>
+    </div>
+
+    <!-- PESTAÑA 1: CALCULADORA Y GENERADOR -->
+    <div id="tab-calculadora" class="tab-content active">
+        <div class="card">
+            <div class="section-title">1. Datos del Empleado y Empresa</div>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Nombre Empresa</label>
+                    <input type="text" id="empresa" placeholder="Ej. Mi Empresa S.L." oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>Nombre Empleado</label>
+                    <input type="text" id="empleado" placeholder="Ej. Juan Pérez" oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>Puesto / Categoría</label>
+                    <input type="text" id="puesto" placeholder="Ej. Administrativo" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="section-title">2. Devengos (Ingresos Brutos)</div>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Salario Base (€)</label>
+                    <input type="number" id="salarioBase" value="1200" oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>Complementos / Plus (€)</label>
+                    <input type="number" id="complementos" value="150" oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>Horas Extra (€)</label>
+                    <input type="number" id="horasExtra" value="0" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="section-title">3. Deducciones (Retenciones)</div>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Seguridad Social (%)</label>
+                    <input type="number" id="ssPorcentaje" value="6.35" step="0.01" oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>IRPF (%)</label>
+                    <input type="number" id="irpfPorcentaje" value="12" step="0.1" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-row">
+                    <span>Total Devengado (Salario Bruto):</span>
+                    <strong id="resBruto">0.00 €</strong>
+                </div>
+                <div class="result-row">
+                    <span>Deducción Seguridad Social:</span>
+                    <span id="resSS">-0.00 €</span>
+                </div>
+                <div class="result-row">
+                    <span>Deducción IRPF:</span>
+                    <span id="resIRPF">-0.00 €</span>
+                </div>
+                <div class="result-row total">
+                    <span>LÍQUIDO A PERCIBIR (NETO):</span>
+                    <span id="resNeto">0.00 €</span>
+                </div>
+            </div>
+
+            <button class="btn btn-success no-print" onclick="window.print()">🖨️ Imprimir o Guardar en PDF</button>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 2: CONVERTIDOR DESDE EXCEL -->
+    <div id="tab-excel" class="tab-content">
+        <div class="card">
+            <div class="section-title">Pegar datos desde Excel o Google Sheets</div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+                Copia las columnas de tu hoja de cálculo (Empresa, Empleado, Salario Base, Complementos, IRPF%) separadas por tabulaciones o comas y pégalas abajo:
+            </p>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <textarea id="excelInput" rows="5" placeholder="Empresa	Empleado	SalarioBase	Complementos	IRPF
+MiEmpresa	Juan	1200	150	12"></textarea>
+            </div>
+            <button class="btn" onclick="procesarExcel()">Cargar Datos en la Calculadora</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        if(tab === 'calculadora') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('tab-calculadora').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('tab-excel').classList.add('active');
+        }
+    }
+
+    function calcular() {
+        const salarioBase = parseFloat(document.getElementById('salarioBase').value) || 0;
+        const complementos = parseFloat(document.getElementById('complementos').value) || 0;
+        const horasExtra = parseFloat(document.getElementById('horasExtra').value) || 0;
+        const ssPorcentaje = parseFloat(document.getElementById('ssPorcentaje').value) || 0;
+        const irpfPorcentaje = parseFloat(document.getElementById('irpfPorcentaje').value) || 0;
+
+        const totalBruto = salarioBase + complementos + horasExtra;
+        const deduccionSS = totalBruto * (ssPorcentaje / 100);
+        const deduccionIRPF = totalBruto * (irpfPorcentaje / 100);
+        const totalNeto = totalBruto - deduccionSS - deduccionIRPF;
+
+        document.getElementById('resBruto').innerText = totalBruto.toFixed(2) + ' €';
+        document.getElementById('resSS').innerText = '-' + deduccionSS.toFixed(2) + ' €';
+        document.getElementById('resIRPF').innerText = '-' + deduccionIRPF.toFixed(2) + ' €';
+        document.getElementById('resNeto').innerText = totalNeto.toFixed(2) + ' €';
+    }
+
+    function procesarExcel() {
+        const input = document.getElementById('excelInput').value.trim();
+        if(!input) return alert('Por favor, pega primero los datos.');
+
+        const lineas = input.split('\n');
+        const ultimaLinea = lineas[lineas.length - 1]; // Toma la última fila pegada
+        const datos = ultimaLinea.split(/[\t,;]/); // Separa por tabuladores, comas o punto y coma
+
+        if(datos.length >= 1) document.getElementById('empresa').value = datos[0] || '';
+        if(datos.length >= 2) document.getElementById('empleado').value = datos[1] || '';
+        if(datos.length >= 3) document.getElementById('salarioBase').value = parseFloat(datos[2]) || 1200;
+        if(datos.length >= 4) document.getElementById('complementos').value = parseFloat(datos[3]) || 0;
+        if(datos.length >= 5) document.getElementById('irpfPorcentaje').value = parseFloat(datos[4]) || 12;
+
+        calcular();
+        switchTab('calculadora');
+        alert('¡Datos cargados correctamente en la plantilla!');
+    }
+
+    // Calcular al iniciar
+    calcular();
+</script>
+
+</body>
+</html>
