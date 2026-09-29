@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9361810456439265"
-     crossorigin="anonymous"></script>
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9361810456439265" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador y Calculadora de Nóminas Online | Plantilla Fácil</title>
@@ -27,12 +27,11 @@
         }
 
         body {
-             
             background-color: var(--bg-body);
             color: var(--text-main);
             padding: 20px;
         }
-</style>
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -184,11 +183,10 @@
 
         @media print {
             body { background: white; padding: 0; }
-            .tabs, .btn, header p, .no-print { display: none !important; }
+            .tabs, .btn, header p, .no-print, footer { display: none !important; }
             .card { box-shadow: none; border: none; padding: 0; }
             .container { max-width: 100%; }
         }
-     }
     </style>
 </head>
 <body>
@@ -282,8 +280,7 @@
                 Copia las columnas de tu hoja de cálculo (Empresa, Empleado, Salario Base, Complementos, IRPF%) separadas por tabulaciones o comas y pégalas abajo:
             </p>
             <div class="form-group" style="margin-bottom: 15px;">
-                <textarea id="excelInput" rows="5" placeholder="Empresa	Empleado	SalarioBase	Complementos	IRPF
-MiEmpresa	Juan	1200	150	12"></textarea>
+                <textarea id="excelInput" rows="5" placeholder="Empresa	Empleado	SalarioBase	Complementos	IRPF&#10;MiEmpresa	Juan	1200	150	12"></textarea>
             </div>
             <button class="btn" onclick="procesarExcel()">Cargar Datos en la Calculadora</button>
         </div>
@@ -345,7 +342,7 @@ MiEmpresa	Juan	1200	150	12"></textarea>
     calcular();
 </script>
 
-</body><footer style="text-align: center; margin-top: 40px; padding: 20px; font-size: 0.8em; color: #666;">
+<footer style="text-align: center; margin-top: 40px; padding: 20px; font-size: 0.8em; color: #666;">
   <p>Este sitio web utiliza cookies propias y de terceros (como Google AdSense) para personalizar el contenido y analizar el tráfico.</p>
   <p><a href="https://www.google.com/intl/es/policies/privacy/partners/" target="_blank" rel="noopener">Más información sobre cómo usa Google los datos</a></p>
 </footer>
